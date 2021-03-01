@@ -1,6 +1,6 @@
 
 INSERT INTO Employees (first_name, last_name, role_id, manager_id)
-VALUES ("Curtis", "Smith", 9, 8),
+VALUES ("Curt", "Smith", 9, 8),
 ("Reginald", "Dowling", 5, 12),
 ("Allan", "Arellano", 11, 15),
 ("Marvin", "Downs", 16, 0),
