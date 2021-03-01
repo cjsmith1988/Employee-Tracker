@@ -8,7 +8,14 @@ const { getEmployeeChoices,
     getRoleChoices,
     getAllDepartments,
     getAllRoles,
-    getAllEmployees } = require('./utils/sqlQueries.js');
+    getAllEmployees,
+    getAllEmployeesByManager,
+    getAllEmployeesByDepartment,
+    getBudgetByDepartment,
+    addDepartment,
+    addRole,
+    addEmployee,
+    updateEmployeeRole } = require('./utils/sqlQueries.js');
 var employeeList = [];
 const departmentList = [];
 const roleList = [];
@@ -42,7 +49,7 @@ startApplication = () => {
    
     getEmployeeChoices()
    .then(data => {   
-        return getDepartmentChoices(data);
+        return getDepartmentChoices(data.namesList);
     })
     .then(data => { 
         return getRoleChoices(data);
@@ -51,7 +58,6 @@ startApplication = () => {
         return promptUser(data.employeeList,data.departmentList,data.roleList);
     })
     .then(data => {
-        console.log(data);
         switch (data.mainChoice) {
             case "View All Departments":
                 getAllDepartments().then(data => {  
@@ -72,17 +78,71 @@ startApplication = () => {
                 })
                 break;
             case "View Employee by Manager":
-            
+                getAllEmployeesByManager().then(data => {  
+                    console.table(data);
+                    startApplication();
+                })
                 break;
             case "View Employee by department":
-        
+                getAllEmployeesByDepartment().then(data => {  
+                    console.table(data);
+                    startApplication();
+                })
                 break;
             case "View total utilized budget by department":
-        
+                getBudgetByDepartment().then(data => {  
+                    console.table(data);
+                    startApplication();
+                })        
                 break;
             case "Add a Department":
-    
+                addDepartment(data.addDepartment).then(data => {  
+                    startApplication();
+                })
                 break;
+            case "Add a Role":
+                getDepartmentChoices(data).then(data => {
+                    let newData = data.employeeList;
+                    let departmentID = data.departmentList.indexOf(newData.departmentChoice)+1;
+                    newData.departmentID = departmentID;
+                    addRole(newData).then(data => {  
+                        startApplication();
+                    })
+                })
+                break;
+            case "Add an Employee":
+                getRoleChoices(data).then(data => { 
+                    let roleID = data.roleList.indexOf(data.employeeList.roleChoice)+1;
+                    data.employeeList.roleID = roleID;
+                    let newData = data.employeeList;
+                    getEmployeeChoices(newData).then(data => {
+                        let managerID = data.namesList.indexOf(data.employeeList.managerChoice)+1;
+                        data.employeeList.managerID = managerID;
+                        let newData = data.employeeList;
+                        addEmployee(newData).then(data => {  
+                            startApplication();
+                        })
+                    })
+                })
+                break;    
+                console.log(newData);
+            case "Update an Employee's Role":
+                getRoleChoices(data).then(data => { 
+                    let roleID = data.roleList.indexOf(data.employeeList.roleChoice)+1;
+                    data.employeeList.roleID = roleID;
+                    let newData = data.employeeList;
+                    getEmployeeChoices(newData).then(data => {
+                        let employeeID = data.namesList.indexOf(data.employeeList.employeeChoice)+1;
+                        data.employeeList.employeeID = employeeID;
+                        let newData = data.employeeList;
+                        //console.log(newData);
+                        updateEmployeeRole(newData).then(data => {  
+                            startApplication();
+                        })
+                    })
+                })        
+                break;
+
             case "QUIT":
                 connection.end();
                 break;
