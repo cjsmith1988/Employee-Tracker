@@ -24,7 +24,7 @@ To download this application localy follow these steps:
 
 - In the command line type "npm i"
 
-- Open a command line in the location of the cloned directory and type "mysql" and "source ./db/schema.sql" and "source ./db/seeds.sql"
+- Open a command line in the location of the cloned directory and type "mysql -u root -h localhost -p" and "source ./db/schema.sql" and "source ./db/seeds.sql"
 
 - this will install the mySQL database
 
