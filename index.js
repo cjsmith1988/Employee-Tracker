@@ -186,7 +186,7 @@ startApplication = () => {
                     let employeeID = data.namesList.indexOf(data.employeeList.employeeChoice)+1;
                     data.employeeList.employeeID = employeeID;
                     let newData = data.employeeList;
-                    console.log(newData);
+                    //console.log(newData);
                     deleteEmployee(newData).then(data => {  
                         startApplication();
                     })
