@@ -58,5 +58,22 @@ getRoleChoices = (master) =>
         }); 
     }); 
 };
+getAllEmployees = () =>
+{    
+    const sql = `SELECT employees.id, first_name, last_name, roles.title, departments.name AS department, roles.salary, roles.salary, manager_id  
+                FROM employees 
+                LEFT JOIN roles ON employees.role_id = roles.id
+                LEFT JOIN departments ON roles.department_id = departments.id
+                LEFT JOIN employees ON employees.manager_id = emplyees.id`;
+    const params = [];
+    return new Promise(function(resolve, reject)
+    {
+        const query = connection.query(sql,params,
+        function(err, res) {
+        if (err) reject(err);
+        resolve(res); 
+        });
+    }); 
+};
 
-module.exports = {getEmployeeChoices,getDepartmentChoices,getRoleChoices};
+module.exports = {getEmployeeChoices,getDepartmentChoices,getRoleChoices,getAllEmployees};
