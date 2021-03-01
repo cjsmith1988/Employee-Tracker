@@ -1,28 +1,36 @@
-const inquirer = require('inquirer');
-//const db = require('./db/database');
+
 const cTable = require('console.table');
-const mysql = require('mysql2');
+//const mysql = require('mysql2');
+var connection = require('./db/database.js');
+const { promptUser } = require('./utils/inqPrompts.js');
+const { getEmployeeChoices,getDepartmentChoices,getRoleChoices } = require('./utils/sqlQueries.js');
+var employeeList = [];
+const departmentList = [];
+const roleList = [];
 
-// Connect to database
-const connection = mysql.createConnection({
-  host: 'localhost',
-  port: 3306,
-  user: 'root',
-  password: 'Ranfunk1988*',
-  database: 'employeeManagementDB'
-});
 
-// Connect to database
- connection.connect(err => {
-  if (err) throw err;
-  console.log('connected as id ' + connection.threadId + '\n');
-  afterConnection();
-});
+getEmployeeChoices()
+   .then(data => {   
+        return getDepartmentChoices(data);
+    })
+    .then(data => { 
+        return getRoleChoices(data);
+    })
+    .then(data => {  
+        return promptUser(data.employeeList,data.departmentList,data.roleList);
+    })
+    .then(data => {
+        console.log(data); 
+          
+    })
+    .catch(err => {
+        console.log(err);
+    }); 
 
-afterConnection = () => {
-    connection.query('SELECT * FROM employees', function(err, res) {
-      if (err) throw err;
-      console.table(res);
-      connection.end();
-    });
-  };
+
+
+
+
+//connection.end();
+
+
