@@ -9,7 +9,7 @@
 
 **Installation**: 	
 
-access Github repository here: https://github.com/cjsmith1988/Note-Taker
+access Github repository here: https://github.com/cjsmith1988/Employee-Tracker
 
 
 To download this application localy follow these steps:
