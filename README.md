@@ -11,9 +11,9 @@
 
 access Github repository here: https://github.com/cjsmith1988/Employee-Tracker
 
-🎥 Part 1: https://youtube.com/embed/vZ-Xmi5_w3
+🎥 Part 1: https://youtube.com/embed/40Ln_GPJjPM
 
-🎥 Part 2: https://youtube.com/embed/137DPd69Ab
+🎥 Part 2: https://youtube.com/embed/Y3TF6MJbKEE
 
 
 To download this application localy follow these steps:
