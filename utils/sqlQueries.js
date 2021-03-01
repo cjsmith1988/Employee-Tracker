@@ -58,13 +58,40 @@ getRoleChoices = (master) =>
         }); 
     }); 
 };
+getAllDepartments = () =>
+{    
+    const sql = `SELECT departments.id,departments.name AS department FROM departments`;
+    const params = [];
+    return new Promise(function(resolve, reject)
+    {
+        const query = connection.query(sql,params,
+        function(err, res) {
+        if (err) reject(err);
+        resolve(res); 
+        });
+    }); 
+};
+getAllRoles = () =>
+{    
+    const sql = `SELECT roles.id,roles.title AS role, roles.salary FROM roles`;
+    const params = [];
+    return new Promise(function(resolve, reject)
+    {
+        const query = connection.query(sql,params,
+        function(err, res) {
+        if (err) reject(err);
+        resolve(res); 
+        });
+    }); 
+};
 getAllEmployees = () =>
 {    
-    const sql = `SELECT employees.id, first_name, last_name, roles.title, departments.name AS department, roles.salary, roles.salary, manager_id  
+    const sql = `SELECT employees.id, employees.first_name, employees.last_name, roles.title, departments.name AS department, roles.salary, CONCAT(employeesb.first_name," ",employeesb.last_name) AS Manager  
                 FROM employees 
+                LEFT JOIN employees AS employeesb ON employees.manager_id = employeesb.id
                 LEFT JOIN roles ON employees.role_id = roles.id
                 LEFT JOIN departments ON roles.department_id = departments.id
-                LEFT JOIN employees ON employees.manager_id = emplyees.id`;
+                `;
     const params = [];
     return new Promise(function(resolve, reject)
     {
@@ -76,4 +103,4 @@ getAllEmployees = () =>
     }); 
 };
 
-module.exports = {getEmployeeChoices,getDepartmentChoices,getRoleChoices,getAllEmployees};
+module.exports = {getEmployeeChoices,getDepartmentChoices,getRoleChoices,getAllDepartments,getAllRoles,getAllEmployees};
