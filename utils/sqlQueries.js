@@ -59,6 +59,9 @@ getRoleChoices = (master) =>
     if (master.mainChoice === "Update an Employee's Role"){
         employeeList = master;
     }
+    if (master.mainChoice === "Delete a Role"){
+        employeeList = master;
+    }
     const sql = `SELECT title FROM roles`;
     const params = [];
     return new Promise(function(resolve, reject)
@@ -227,18 +230,69 @@ addEmployee = (newData) =>
 updateEmployeeRole = (newData) =>
 {    
     console.log(newData);
-    const sql = `UPDATE employees SET employees.role_id = ? WHERE employees.first_name = Curt ;`;
+    const sql = `UPDATE employees SET role_id = ? WHERE id = ?;`;
+    const params = [newData.roleID,newData.employeeID];
+    return new Promise(function(resolve, reject)
+    {
+        const query = connection.query(sql,params,
+        function(err, res) {
+        if (err) reject(err);
+        resolve(console.log(res.affectedRows + ' Employees Role Updated!\n')); 
+        });
+    }); 
+};
+updateEmployeeManager = (newData) =>
+{    
+    const sql = `UPDATE employees SET manager_id = ? WHERE id = ?;`;
+    const params = [newData.managerID,newData.employeeID];
+    return new Promise(function(resolve, reject)
+    {
+        const query = connection.query(sql,params,
+        function(err, res) {
+        if (err) reject(err);
+        resolve(console.log(res.affectedRows + ' Employees Manager Updated!\n')); 
+        });
+    }); 
+};
+deleteDepartment = (newData) =>
+{    
+    const sql = `DELETE FROM departments WHERE id = ?;`;
+    const params = [newData.departmentID];
+    return new Promise(function(resolve, reject)
+    {
+        const query = connection.query(sql,params,
+        function(err, res) {
+        if (err) reject(err);
+        resolve(console.log(res.affectedRows + ' Department Deleted!\n')); 
+        });
+    }); 
+};
+deleteRole = (newData) =>
+{    
+    const sql = `DELETE FROM roles WHERE id = ?;`;
     const params = [newData.roleID];
     return new Promise(function(resolve, reject)
     {
         const query = connection.query(sql,params,
         function(err, res) {
         if (err) reject(err);
-        resolve(res); 
+        resolve(console.log(res.affectedRows + ' Role Deleted!\n')); 
         });
     }); 
 };
-
+deleteEmployee = (newData) =>
+{    
+    const sql = `DELETE FROM employees WHERE id = ?;`;
+    const params = [newData.employeeID];
+    return new Promise(function(resolve, reject)
+    {
+        const query = connection.query(sql,params,
+        function(err, res) {
+        if (err) reject(err);
+        resolve(console.log(res.affectedRows + ' Employee Deleted!\n')); 
+        });
+    }); 
+};
 module.exports = {getEmployeeChoices,
     getDepartmentChoices,
     getRoleChoices,
@@ -251,4 +305,8 @@ module.exports = {getEmployeeChoices,
     addDepartment,
     addRole,
     addEmployee,
-    updateEmployeeRole};
+    updateEmployeeRole,
+    updateEmployeeManager,
+    deleteDepartment,
+    deleteRole,
+    deleteEmployee};

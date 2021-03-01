@@ -15,7 +15,11 @@ const { getEmployeeChoices,
     addDepartment,
     addRole,
     addEmployee,
-    updateEmployeeRole } = require('./utils/sqlQueries.js');
+    updateEmployeeRole,
+    updateEmployeeManager,
+    deleteDepartment,
+    deleteRole,
+    deleteEmployee } = require('./utils/sqlQueries.js');
 var employeeList = [];
 const departmentList = [];
 const roleList = [];
@@ -110,6 +114,8 @@ startApplication = () => {
                     })
                 })
                 break;
+                updateEmployeeManager
+                console.log(newData);
             case "Add an Employee":
                 getRoleChoices(data).then(data => { 
                     let roleID = data.roleList.indexOf(data.employeeList.roleChoice)+1;
@@ -124,8 +130,7 @@ startApplication = () => {
                         })
                     })
                 })
-                break;    
-                console.log(newData);
+                break;
             case "Update an Employee's Role":
                 getRoleChoices(data).then(data => { 
                     let roleID = data.roleList.indexOf(data.employeeList.roleChoice)+1;
@@ -142,7 +147,51 @@ startApplication = () => {
                     })
                 })        
                 break;
-
+            case "Update an Employee's Manager":
+                getEmployeeChoices(data).then(data => { 
+                    let managerID = data.namesList.indexOf(data.employeeList.managerChoice)+1;
+                    let employeeID = data.namesList.indexOf(data.employeeList.employeeChoice)+1;
+                    data.employeeList.managerID = managerID;
+                    data.employeeList.employeeID = employeeID;
+                    let newData = data.employeeList;
+                    updateEmployeeManager(newData).then(data => {  
+                        startApplication();
+                    })
+                })        
+                break;
+            case "Delete a Department":
+                getDepartmentChoices(data).then(data => { 
+                    let departmentID = data.departmentList.indexOf(data.employeeList.departmentChoice)+1;
+                    data.employeeList.departmentID = departmentID;
+                    let newData = data.employeeList;
+                    //console.log(newData);
+                    deleteDepartment(newData).then(data => {  
+                        startApplication();
+                    })
+                })        
+                break;
+            case "Delete a Role":
+                getRoleChoices(data).then(data => { 
+                    let roleID = data.roleList.indexOf(data.employeeList.roleChoice)+1;
+                    data.employeeList.roleID = roleID;
+                    let newData = data.employeeList;
+                    //console.log(newData);
+                    deleteRole(newData).then(data => {  
+                        startApplication();
+                    })
+                })        
+                break;
+            case "Delete an Employee":
+                getEmployeeChoices(data).then(data => { 
+                    let employeeID = data.namesList.indexOf(data.employeeList.employeeChoice)+1;
+                    data.employeeList.employeeID = employeeID;
+                    let newData = data.employeeList;
+                    console.log(newData);
+                    deleteEmployee(newData).then(data => {  
+                        startApplication();
+                    })
+                })        
+                break;
             case "QUIT":
                 connection.end();
                 break;
